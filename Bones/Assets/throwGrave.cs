@@ -8,6 +8,8 @@ public class throwGrave : MonoBehaviour
     public float horispeed;
     public PlayerController controller;
     bool isRight = false;
+    public AudioSource hitsound1;
+    public AudioSource hitsound2;
     public bool hasBounced = false;
   Rigidbody2D rb;
     void Awake()
@@ -39,7 +41,18 @@ public class throwGrave : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D collision)
     {
-        
+        hitsound1.pitch += 0.05f;
+        hitsound2.pitch += 0.05f;
+        if (hitsound1.isPlaying)
+        {
+            hitsound2.Play();
+            
+        }
+        else
+        {
+            hitsound1.Play();
+            
+        }
         
         if (collision.gameObject.tag == "Ground")
         {

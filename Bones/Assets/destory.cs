@@ -7,6 +7,7 @@ public class destory : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        
         StartCoroutine(destruct(0.4f));
     }
 

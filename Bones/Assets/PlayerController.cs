@@ -9,7 +9,7 @@ public class PlayerController : MonoBehaviour
     public float speed;
     Animator anim;
     public float rayLength;
-     public bool FacingRight = true;
+    public bool FacingRight = true;
     public Transform RayPoint;
     public GameObject GraveHeld;
     public bool isHolding = false;
@@ -41,6 +41,13 @@ public class PlayerController : MonoBehaviour
     private int direction;
     bool isLunging = false;
 
+    [Header("Combat Variables")]
+    public bool invincible = false;
+    public float invinceTime = 0.8f;
+    public AudioSource Smashsound1;
+    public AudioSource Smashsound2;
+    public AudioSource hurtsound;
+
     public float Health;
 
     // Start is called before the first frame update
@@ -67,6 +74,8 @@ public class PlayerController : MonoBehaviour
 
         lungeTimer -= Time.deltaTime;
 
+
+
         RaycastHit2D hit = Physics2D.Raycast(RayPoint.position, -Vector2.up * JumpRayLength);
        if(hit.collider != null)
         {
@@ -75,7 +84,7 @@ public class PlayerController : MonoBehaviour
                 grounded = true;
                 canJump = true;
                 anim.SetBool("isJumping", false);
-            }
+        }
             else
             {
                 grounded = false;
@@ -90,9 +99,9 @@ public class PlayerController : MonoBehaviour
         }
 
 
+        if (invincible == false)
+        {
 
-      
-          
             if (dashTime < 0)
             {
                 anim.SetBool("isLunging", false);
@@ -101,9 +110,9 @@ public class PlayerController : MonoBehaviour
             playerBox.size = BoxSize;
             playerBox.offset = BoxOffset;
 
-        }
+            }
             else
-            {
+                {
                
                 
                 dashTime -= Time.deltaTime;
@@ -113,15 +122,16 @@ public class PlayerController : MonoBehaviour
                 rb.velocity = new Vector2(1, 0.15f) * dashSpeed;
               
                
-            }
+                }
                 else
                 {
                     rb.velocity = new Vector2(-1, 0.15f) * dashSpeed;
                 }
 
             
-        }
+                }
         
+        }
         if( rb.velocity.y < 0)
         {
             rb.velocity += Vector2.up * Physics2D.gravity.y * (FallMultiplier - 1) * Time.deltaTime; 
@@ -144,9 +154,20 @@ public class PlayerController : MonoBehaviour
             rb.isKinematic = false;
             rb.constraints = RigidbodyConstraints2D.FreezeRotation;
         }
-        
+
+        AudioSource walk = GetComponent<AudioSource>();
         if(Mathf.Abs(horizontal) > 0.1)
         {
+          if(grounded == true)
+            {
+                walk.UnPause();
+                
+            }
+            else
+            {
+                walk.Pause();
+            }
+
             anim.SetBool("isRunning", true);
             if(horizontal > 0.1f)
             {
@@ -166,10 +187,12 @@ public class PlayerController : MonoBehaviour
 
                 }
             }
+            
         }
         else
         {
             anim.SetBool("isRunning", false);
+            walk.Pause();
         }
 
         if (Input.GetButtonDown("Fire1") )
@@ -219,12 +242,45 @@ public class PlayerController : MonoBehaviour
     {
         Debug.Log("SMash");
         anim.SetTrigger("smash");
+        if(Smashsound1.isPlaying == false)
+        {
+            
+            Smashsound1.Play();
+        }
+        else
+        {
+            Smashsound2.Play();
+        }
         isSmashing = true;
         yield return new WaitForSeconds(time);
         isSmashing = false;
     }
 
+   IEnumerator HurtState(float time)
+    {
+        StartCoroutine(ColorFlash(0.1f));
+        invincible = true;
+        yield return new WaitForSeconds(time);
+        invincible = false;
+        //make the sprite flash during this duration
 
+    }
+    IEnumerator ColorFlash(float time)
+    {
+        Color color = sprite.color;
+      for(int i = 0; i < 3; i++)
+        {
+        color.a = 0f;
+        sprite.color = color;
+            yield return new WaitForSeconds(time);
+        color.a = 100f;
+        sprite.color = color;
+            yield return new WaitForSeconds(time);
+
+        }
+
+
+    }
     void DodgeRoll()
     {
         dashTime = startDashTime;
@@ -263,19 +319,21 @@ public class PlayerController : MonoBehaviour
         anim.SetBool("isHolding", true);
     }
 
-    public void TakeDamage(float damage)
+    public void TakeDamage(float damage, Vector2 direction)
     {
         Health -= damage;
         Debug.Log("Player has taken damage");
+        StartCoroutine(HurtState(invinceTime));
+        rb.velocity = (Vector2.up * 5) + direction * -3;
+        hurtsound.Play();
         if (isHolding)
         {
             ThrowGrave();
         }
         anim.SetTrigger("damaged");
         
-        //raycast to enemy position, shoot the player in the opposite direction
-        //drop the grave if holding it, just do throwgrave logic
-        //dont allow character input and also make invincible for a brief moment
+        //fix bug where dash rolling into enemy and getting hurt briefly makes physics weird
+        //make sprite flash with damage
     }
 
     void OnTriggerEnter2D(Collider2D collision)
@@ -296,8 +354,13 @@ public class PlayerController : MonoBehaviour
     {
         if (collision.gameObject.tag == "Enemy")
         {
-            if(!isSmashing)
-            TakeDamage(10);
+            if (!isSmashing && !invincible)
+            {
+            Vector2 enemydirection = collision.gameObject.transform.position - transform.position; 
+            TakeDamage(10, enemydirection);
+
+            }
+                
         }
     }
 }
