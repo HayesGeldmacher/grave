@@ -33,6 +33,7 @@ public class PlayerController : MonoBehaviour
     public bool grounded = true;
     public float JumpRayLength = 0.2f;
     public Transform throwpoint;
+    public AudioSource jumpsound;
 
     [Header("Dash Variables")]
     public float dashSpeed;
@@ -138,6 +139,7 @@ public class PlayerController : MonoBehaviour
         }
        else if(rb.velocity.y > 0 && !Input.GetButton("Fire1"))
         {
+           
             rb.velocity += Vector2.up * Physics2D.gravity.y * (lowJumpMultiplier - 1) * Time.deltaTime;
         }
         
