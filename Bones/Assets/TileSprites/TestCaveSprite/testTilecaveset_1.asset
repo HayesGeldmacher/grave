@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: testTilecaveset_1
   m_EditorClassIdentifier: 
   m_Sprite: {fileID: -3624484244106012504, guid: 7fe2944c3f4c7254983c5cee9743680f, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.8207547, g: 0, b: 0.7548275, a: 1}
   m_Transform:
     e00: 1
     e01: 0

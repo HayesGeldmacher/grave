@@ -49,7 +49,9 @@ public class PlayerController : MonoBehaviour
     public AudioSource Smashsound2;
     public AudioSource hurtsound;
 
+
     public float Health;
+    public float MaxGraveDist;
 
     // Start is called before the first frame update
     void Start()
@@ -64,8 +66,7 @@ public class PlayerController : MonoBehaviour
     }
 
 
-
-
+    
 
     // Update is called once per frame
     void Update()
@@ -142,8 +143,31 @@ public class PlayerController : MonoBehaviour
            
             rb.velocity += Vector2.up * Physics2D.gravity.y * (lowJumpMultiplier - 1) * Time.deltaTime;
         }
-        
-        
+
+        //raycast distance from child object and player, if too far rematerialize grave in hand
+        if (!isHolding)
+        {
+            //figure out where grave child is'
+            GameObject rayGrave = GameObject.FindGameObjectWithTag("Grave");
+            
+            Vector2 gravedist =  rayGrave.transform.position - transform.position;
+            
+            float distance = Mathf.Abs(gravedist.x) + Mathf.Abs(gravedist.y);
+            if(distance > MaxGraveDist)
+            {
+               
+                Debug.Log("grave rematerialized");
+                GrabGrave();
+                Destroy(rayGrave);
+                if (CurrentThrownGrave)
+                {
+                Destroy(CurrentThrownGrave);
+
+                }
+            }
+
+
+        }
         
         if (isSmashing)
         {

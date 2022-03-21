@@ -7,6 +7,7 @@ TagManager:
   - Grave
   - Enemy
   - Ground
+  - throwntag
   layers:
   - Default
   - TransparentFX

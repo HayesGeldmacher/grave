@@ -165,7 +165,7 @@ TilemapCollider2D:
   m_GameObject: {fileID: 144757625}
   m_Enabled: 1
   m_Density: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: de2d5e61614d2504983b53a2bcc8a035, type: 2}
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
@@ -501,7 +501,9 @@ Tilemap:
       e33: 1
   m_TileColorArray:
   - m_RefCount: 24
-    m_Data: {r: 1, g: 1, b: 1, a: 1}
+    m_Data: {r: 0.8207547, g: 0, b: 0.7548275, a: 1}
+  - m_RefCount: 0
+    m_Data: {r: 2.7065e-41, g: 2.7065e-41, b: 2.7065e-41, a: 2.7065e-41}
   m_TileObjectToInstantiateArray: []
   m_AnimationFrameRate: 1
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -800,7 +802,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: -28
   m_ChunkSize: {x: 32, y: 32, z: 32}
   m_ChunkCullingBounds: {x: 0, y: 0, z: 0}
   m_MaxChunkCount: 16
@@ -1102,7 +1104,9 @@ Tilemap:
       e33: 1
   m_TileColorArray:
   - m_RefCount: 24
-    m_Data: {r: 1, g: 1, b: 1, a: 1}
+    m_Data: {r: 0.8207547, g: 0, b: 0.7548275, a: 1}
+  - m_RefCount: 0
+    m_Data: {r: 0, g: 0, b: 0, a: 0}
   m_TileObjectToInstantiateArray: []
   m_AnimationFrameRate: 1
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -1306,6 +1310,7 @@ MonoBehaviour:
   Smashsound2: {fileID: 355841190}
   hurtsound: {fileID: 355841191}
   Health: 100
+  MaxGraveDist: 20
 --- !u!50 &355841187
 Rigidbody2D:
   serializedVersion: 4
@@ -1850,6 +1855,7 @@ GameObject:
   - component: {fileID: 519420031}
   - component: {fileID: 519420029}
   - component: {fileID: 519420030}
+  - component: {fileID: 519420033}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -1947,13 +1953,26 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 519420028}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &519420033
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 519420028}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 062fa198e114d1947b5c535b42d4afb6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Playertrans: {fileID: 355841183}
 --- !u!1001 &672416429
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2607,7 +2626,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1402905949}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.034, y: -0.372, z: 0}
+  m_LocalPosition: {x: -0.034, y: -0.4, z: 0}
   m_LocalScale: {x: 0.42392, y: 0.42392, z: 0.42392}
   m_Children: []
   m_Father: {fileID: 355841183}
