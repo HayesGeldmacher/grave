@@ -11,6 +11,7 @@ public class throwGrave : MonoBehaviour
     public AudioSource hitsound1;
     public AudioSource hitsound2;
     public bool hasBounced = false;
+    
   Rigidbody2D rb;
     void Awake()
     {
@@ -68,6 +69,7 @@ public class throwGrave : MonoBehaviour
             Vector2 HitPoint = collision.contacts[0].point;
 
             collision.gameObject.GetComponent<enemy>().TakeDamage(controller.damage, HitPoint);
+            controller.Heal(3);
             if (isRight)
             {
                 rb.velocity = new Vector2(-horispeed/2, vertspeed);

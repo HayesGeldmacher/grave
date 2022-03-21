@@ -52,7 +52,8 @@ public class PlayerController : MonoBehaviour
 
     public float Health;
     public float MaxGraveDist;
-
+    public ParticleSystem feetdust;
+    public float dustSize;
     // Start is called before the first frame update
     void Start()
     {
@@ -63,6 +64,7 @@ public class PlayerController : MonoBehaviour
         BoxSize = playerBox.size;
         dashTime = -1;
         lungeTimer = 0;
+        
     }
 
 
@@ -186,12 +188,17 @@ public class PlayerController : MonoBehaviour
         {
           if(grounded == true)
             {
+                //plays particle system and sound when walking
                 walk.UnPause();
+                feetdust.Play();
                 
             }
             else
             {
                 walk.Pause();
+                feetdust.Pause();
+                feetdust.Clear();
+                
             }
 
             anim.SetBool("isRunning", true);
@@ -217,8 +224,12 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
+           // disables particle system, run animation, and sound effect when not walking
             anim.SetBool("isRunning", false);
             walk.Pause();
+            feetdust.Pause();
+            feetdust.Clear();
+
         }
 
         if (Input.GetButtonDown("Fire1") )
@@ -263,6 +274,22 @@ public class PlayerController : MonoBehaviour
         }
 
     }
+
+    public void Heal(float HealAmount)
+    {
+        //Heal the player
+       if((Health + HealAmount) < 100)
+        {
+
+        Health += HealAmount;
+        }
+        else
+        {
+            Health = 100;
+        }
+        // add feedback
+    }
+
 
    public IEnumerator Smash(float time)
     {
